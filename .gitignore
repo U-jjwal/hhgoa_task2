@@ -2,9 +2,12 @@ venv/
 __pycache__/
 *.pyc
 .env
-data/*.json
+# Block raw large dataset files
 data/*.parquet
-*.faiss
+# Allow pre-built index and curated subset (needed for production)
+!data/rag_index.faiss
+!data/rag_index.chunks.json
+!data/hi_subset_5000.json
 *.npy
 .DS_Store
 *.egg-info/
