@@ -7,17 +7,20 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Noto+Sans+Devanagari:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-base: #080710;
-            --surface-glass: rgba(255, 255, 255, 0.05);
-            --border-glass: rgba(255, 255, 255, 0.1);
-            --primary: #6366f1;
-            --primary-glow: rgba(99, 102, 241, 0.15);
-            --accent: #10b981;
-            --accent-glow: rgba(16, 185, 129, 0.15);
+            /* Hacker House Goa Theme Colors */
+            --bg-base: #0b7c31; /* Vibrant Green */
+            --bg-gradient: #0c8636;
+            --surface-glass: rgba(0, 0, 0, 0.25);
+            --border-glass: rgba(255, 234, 0, 0.2);
+            --primary: #ffea00; /* Vibrant Yellow */
+            --primary-glow: rgba(255, 234, 0, 0.3);
+            --accent: #ff007f; /* Vibrant Pink for 'Goa' */
+            --accent-glow: rgba(255, 0, 127, 0.3);
             --warn: #f59e0b;
             --danger: #ef4444;
-            --text-main: #f3f4f6;
-            --text-muted: #9ca3af;
+            --text-main: #ffffff;
+            --text-muted: rgba(255, 255, 255, 0.7);
+            --card-shadow: rgba(0, 0, 0, 0.3);
         }
 
         * {
@@ -28,7 +31,7 @@
 
         body {
             font-family: 'Outfit', 'Noto Sans Devanagari', sans-serif;
-            background: radial-gradient(circle at 50% 0%, #1e1b4b 0%, var(--bg-base) 70%);
+            background: linear-gradient(135deg, var(--bg-base) 0%, var(--bg-gradient) 100%);
             color: var(--text-main);
             min-height: 100vh;
             display: flex;
@@ -41,60 +44,93 @@
         header {
             text-align: center;
             margin-bottom: 2rem;
-            animation: fadeIn Down 0.8s ease-out;
+            animation: fadeInDown 0.8s ease-out;
         }
 
         header h1 {
-            font-size: 2.5rem;
+            font-size: 3rem;
             font-weight: 700;
-            background: linear-gradient(135deg, #a5b4fc 0%, #6366f1 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: var(--primary);
             margin-bottom: 0.5rem;
             letter-spacing: -0.05em;
+            text-transform: uppercase;
+            font-family: 'Outfit', sans-serif;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+        }
+        
+        header h1 span {
+            color: var(--accent);
+            font-family: 'Noto Sans Devanagari', sans-serif;
         }
 
         header p {
-            color: var(--text-muted);
-            font-size: 1.1rem;
-            font-weight: 300;
+            color: var(--text-main);
+            font-size: 1.2rem;
+            font-weight: 500;
+            opacity: 0.9;
         }
 
-        .container {
+        .chat-container {
             width: 100%;
-            max-width: 900px;
-            display: grid;
-            grid-template-columns: 1fr;
+            max-width: 800px;
+            display: flex;
+            flex-direction: column;
             gap: 1.5rem;
             animation: fadeIn 1s ease-out;
-        }
-
-        @media (min-width: 768px) {
-            .container {
-                grid-template-columns: 1.2fr 0.8fr;
-            }
+            padding-bottom: 150px; /* Space for fixed bottom input */
+            flex: 1;
+            overflow-y: auto;
         }
 
         .card {
             background: var(--surface-glass);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--border-glass);
             border-radius: 24px;
             padding: 2rem;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            box-shadow: 0 10px 40px var(--card-shadow);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .card:hover {
-            box-shadow: 0 8px 32px 0 rgba(99, 102, 241, 0.1);
+            box-shadow: 0 12px 45px rgba(255, 234, 0, 0.15);
         }
 
-        /* Input Controls */
+        /* Fixed Bottom Input Controls */
+        .bottom-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(to top, var(--bg-gradient) 60%, transparent);
+            padding: 2rem 1rem 1rem 1rem;
+            display: flex;
+            justify-content: center;
+            z-index: 100;
+        }
+
         .input-section {
+            width: 100%;
+            max-width: 800px;
             display: flex;
             flex-direction: column;
             align-items: center;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-glass);
+            border-radius: 24px;
+            padding: 1rem 1.5rem;
+            box-shadow: 0 8px 32px 0 rgba(0,0,0,0.5);
+            gap: 1rem;
+        }
+
+        .input-controls-row {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
             gap: 1.5rem;
         }
 
@@ -110,22 +146,23 @@
         .record-btn {
             position: relative;
             z-index: 10;
-            width: 90px;
-            height: 90px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);
+            background: linear-gradient(135deg, var(--accent) 0%, #c5005b 100%);
             border: none;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 20px rgba(239, 68, 68, 0.4);
+            box-shadow: 0 4px 20px var(--accent-glow);
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            flex-shrink: 0;
         }
 
         .record-btn:hover {
             transform: scale(1.05);
-            box-shadow: 0 4px 30px rgba(239, 68, 68, 0.6);
+            box-shadow: 0 4px 30px var(--accent-glow);
         }
 
         .record-btn:active {
@@ -133,8 +170,8 @@
         }
 
         .record-btn svg {
-            width: 38px;
-            height: 38px;
+            width: 28px;
+            height: 28px;
             fill: white;
             transition: all 0.3s ease;
         }
@@ -464,17 +501,122 @@
 </head>
 <body>
     <header>
-        <h1>🎙️ Hindi Voice RAG</h1>
-        <p>HH Goa 2026 - High-Performance RAG System</p>
+        <h1>2:47<span>PM</span> STUDIO</h1>
+        <h1 style="font-size: 3.5rem; line-height: 1.1; margin-top: 1rem;">HACKER <span>गोवा</span> HOUSE</h1>
+        <p style="margin-top: 1rem;">GOA, INDIA &bull; 28 - 31 OCT 2026</p>
+        <p style="font-size: 0.9rem; color: var(--primary); margin-top: 0.5rem; letter-spacing: 2px; text-transform: uppercase;">Voice RAG AI Integration</p>
     </header>
 
-    <div class="container">
-        <!-- Input Panel -->
-        <div style="display: flex; flex-direction: column; gap: 1.5rem;">
-            <div class="card input-section">
-                <h3 style="margin-bottom: 0.5rem; font-weight: 600;">बोलकर पूछें (Voice Input)</h3>
+    <div class="chat-container">
+        
+        <!-- Welcome / Branding Card -->
+        <div class="card" style="text-align: center; border: 2px solid var(--accent); background: rgba(0,0,0,0.4);">
+            <h2 style="color: var(--primary); margin-bottom: 1rem;">Welcome to the Hacker House!</h2>
+            <p style="font-size: 1.1rem; line-height: 1.5; color: #fff;">This is a highly responsive, mobile-first Voice RAG AI built for the <strong>HH Goa 2026 Hackathon</strong>. Tap the microphone below or type your question to start chatting instantly!</p>
+        </div>
+
+        <!-- Latency Metrics Panel (Moved to top of chat for visibility) -->
+        <div class="card">
+            <h3 style="margin-bottom: 1rem; font-weight: 600; color: var(--primary);">📊 Latency Metrics (लैटेंसी)</h3>
+            
+            <div class="latency-grid">
+                <div class="latency-stat" id="currentLatencyBox">
+                    <div class="lbl">Last Query</div>
+                    <div class="val" id="lastQueryLatency">- ms</div>
+                </div>
+                <div class="latency-stat pass" id="p50Box">
+                    <div class="lbl">P50 (Median)</div>
+                    <div class="val" id="p50Latency">- ms</div>
+                </div>
+            </div>
+
+            <div class="result-group">
+                <div class="result-label" style="color: var(--primary);">Breakdown (Last Query)</div>
+                <div class="latency-breakdown-bar">
+                    <div class="breakdown-segment stt" id="breakdownSTT" style="width: 0%;"></div>
+                    <div class="breakdown-segment retrieval" id="breakdownRetrieval" style="width: 0%;"></div>
+                    <div class="breakdown-segment generation" id="breakdownGeneration" style="width: 0%;"></div>
+                    <div class="breakdown-segment guardrails" id="breakdownGuardrails" style="width: 0%;"></div>
+                </div>
                 
-                <div class="recorder-wrapper">
+                <div class="breakdown-legend">
+                    <div class="legend-item">
+                        <div class="legend-dot" style="background-color: #3b82f6;"></div>
+                        <span>STT: <b id="lblSTT">-</b></span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-dot" style="background-color: #8b5cf6;"></div>
+                        <span>Retrieval: <b id="lblRetrieval">-</b></span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-dot" style="background-color: #ec4899;"></div>
+                        <span>LLM Gen: <b id="lblGeneration">-</b></span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-dot" style="background-color: #10b981;"></div>
+                        <span>Guardrails: <b id="lblGuardrails">-</b></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Output / Response Panel (Chat Area) -->
+        <div class="card results-section" style="border-left: 4px solid var(--primary);">
+            <h3 style="font-weight: 600; margin-bottom: 0.5rem; color: var(--primary);">📋 Conversation (परिणाम)</h3>
+            
+            <div class="loader-wrapper" id="loader">
+                <div class="dot-loader"></div>
+                <div class="dot-loader"></div>
+                <div class="dot-loader"></div>
+                <span style="font-size: 0.9rem; color: var(--primary);">प्रोसेसिंग हो रही है (Processing)...</span>
+            </div>
+
+            <div class="result-group">
+                <div class="result-label" style="color: var(--accent);">You asked (Query)</div>
+                <div class="transcript-box" id="queryBox" style="background: rgba(0,0,0,0.5); border: 1px solid var(--border-glass);">प्रश्न यहाँ दिखाई देगा...</div>
+            </div>
+
+            <div class="result-group">
+                <div class="result-label" style="color: var(--accent);">Hacker House AI (Answer)</div>
+                <div class="answer-box" id="answerBox" style="background: rgba(0,0,0,0.5); border: 1px solid var(--border-glass);">उत्तर यहाँ दिखाई देगा...</div>
+            </div>
+
+            <div class="result-group">
+                <div class="result-label">Security Check (Guardrails)</div>
+                <div class="badge-container" id="guardrailsContainer">
+                    <span class="badge primary">रजिस्टर नहीं हुआ</span>
+                </div>
+            </div>
+
+            <div class="result-group">
+                <div class="result-label">Sources</div>
+                <div class="sources-list" id="sourcesContainer">
+                    <p style="color: var(--text-muted); font-size: 0.9rem; font-style: italic;">कोई स्रोत उपलब्ध नहीं है।</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fixed Bottom Bar like ChatGPT -->
+    <div class="bottom-bar">
+        <div class="input-section">
+            <p id="recordStatus" style="font-size: 0.9rem; color: var(--primary); font-weight: 600; margin-bottom: 0;">Tap mic to speak or type...</p>
+            
+            <div class="input-controls-row">
+                <!-- Text Input -->
+                <div class="text-input-wrapper" style="flex: 1; background: rgba(255,255,255,0.1);">
+                    <input type="text" class="text-input" id="textInput" placeholder="Message Hacker House AI...">
+                </div>
+
+                <!-- Send Text Button -->
+                <button class="send-btn" id="sendBtn" style="background: var(--primary);">
+                    <svg viewBox="0 0 24 24" style="fill: #000;">
+                        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                    </svg>
+                </button>
+                
+                <!-- Voice Button -->
+                <div style="position: relative; display: flex; align-items: center; justify-content: center;">
                     <button class="record-btn" id="recordBtn">
                         <svg viewBox="0 0 24 24" id="micIcon">
                             <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/>
@@ -484,100 +626,6 @@
                         </svg>
                     </button>
                     <div class="recorder-glow"></div>
-                </div>
-                
-                <p id="recordStatus" style="font-size: 0.9rem; color: var(--text-muted);">टैप करें और बोलना शुरू करें</p>
-                
-                <div class="divider">अथवा (OR)</div>
-                
-                <div class="text-input-wrapper">
-                    <input type="text" class="text-input" id="textInput" placeholder="अपना प्रश्न यहाँ टाइप करें...">
-                    <button class="send-btn" id="sendBtn">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Latency Metrics Panel -->
-            <div class="card">
-                <h3 style="margin-bottom: 1rem; font-weight: 600;">📊 लैटेंसी रिपोर्ट (Latency Metrics)</h3>
-                
-                <div class="latency-grid">
-                    <div class="latency-stat" id="currentLatencyBox">
-                        <div class="lbl">Last Query</div>
-                        <div class="val" id="lastQueryLatency">- ms</div>
-                    </div>
-                    <div class="latency-stat pass" id="p50Box">
-                        <div class="lbl">P50 (Median)</div>
-                        <div class="val" id="p50Latency">- ms</div>
-                    </div>
-                </div>
-
-                <div class="result-group">
-                    <div class="result-label">Breakdown (Last Query)</div>
-                    <div class="latency-breakdown-bar">
-                        <div class="breakdown-segment stt" id="breakdownSTT" style="width: 0%;"></div>
-                        <div class="breakdown-segment retrieval" id="breakdownRetrieval" style="width: 0%;"></div>
-                        <div class="breakdown-segment generation" id="breakdownGeneration" style="width: 0%;"></div>
-                        <div class="breakdown-segment guardrails" id="breakdownGuardrails" style="width: 0%;"></div>
-                    </div>
-                    
-                    <div class="breakdown-legend">
-                        <div class="legend-item">
-                            <div class="legend-dot" style="background-color: #3b82f6;"></div>
-                            <span>STT: <b id="lblSTT">-</b></span>
-                        </div>
-                        <div class="legend-item">
-                            <div class="legend-dot" style="background-color: #8b5cf6;"></div>
-                            <span>Retrieval: <b id="lblRetrieval">-</b></span>
-                        </div>
-                        <div class="legend-item">
-                            <div class="legend-dot" style="background-color: #ec4899;"></div>
-                            <span>LLM Gen: <b id="lblGeneration">-</b></span>
-                        </div>
-                        <div class="legend-item">
-                            <div class="legend-dot" style="background-color: #10b981;"></div>
-                            <span>Guardrails: <b id="lblGuardrails">-</b></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Output / Response Panel -->
-        <div class="card results-section">
-            <h3 style="font-weight: 600; margin-bottom: 0.5rem;">📋 परिणाम (Result)</h3>
-            
-            <div class="loader-wrapper" id="loader">
-                <div class="dot-loader"></div>
-                <div class="dot-loader"></div>
-                <div class="dot-loader"></div>
-                <span style="font-size: 0.9rem; color: var(--text-muted);">प्रोसेसिंग हो रही है...</span>
-            </div>
-
-            <div class="result-group">
-                <div class="result-label">पूछा गया प्रश्न (Query)</div>
-                <div class="transcript-box" id="queryBox">प्रश्न यहाँ दिखाई देगा...</div>
-            </div>
-
-            <div class="result-group">
-                <div class="result-label">उत्तर (Answer)</div>
-                <div class="answer-box" id="answerBox">उत्तर यहाँ दिखाई देगा...</div>
-            </div>
-
-            <div class="result-group">
-                <div class="result-label">सुरक्षा जाँच (Guardrails Check)</div>
-                <div class="badge-container" id="guardrailsContainer">
-                    <span class="badge primary">रजिस्टर नहीं हुआ</span>
-                </div>
-            </div>
-
-            <div class="result-group">
-                <div class="result-label">Retrieved Passages (स्रोत)</div>
-                <div class="sources-list" id="sourcesContainer">
-                    <p style="color: var(--text-muted); font-size: 0.9rem; font-style: italic;">कोई स्रोत उपलब्ध नहीं है।</p>
                 </div>
             </div>
         </div>
