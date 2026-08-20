@@ -1,0 +1,12 @@
+venv/
+__pycache__/
+*.pyc
+.env
+data/*.json
+data/*.parquet
+*.faiss
+*.npy
+.DS_Store
+*.egg-info/
+dist/
+build/

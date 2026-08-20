@@ -1,0 +1,23 @@
+# Core
+datasets>=2.18.0
+pandas>=2.0.0
+numpy>=1.24.0
+
+# API
+fastapi>=0.104.0
+uvicorn>=0.24.0
+python-multipart>=0.0.6
+pydantic>=2.0.0
+
+# ML / RAG
+sentence-transformers>=2.2.0
+faiss-cpu>=1.7.4
+
+# STT (Sarvam)
+httpx>=0.25.0
+
+# Guardrails
+langdetect>=1.0.9
+
+# Utilities
+python-dotenv>=1.0.0
