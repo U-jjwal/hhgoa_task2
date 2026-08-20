@@ -10,6 +10,10 @@ RUN apt-get update && apt-get install -y \
 # Install CPU-only PyTorch first (massive size & RAM reduction)
 RUN pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu
 
+# Limit PyTorch to a single thread to save memory and CPU on virtualized hosts
+ENV OMP_NUM_THREADS=1
+ENV MKL_NUM_THREADS=1
+
 # Copy requirements and install
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
