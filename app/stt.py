@@ -24,14 +24,14 @@ class SarvamSTT:
             headers={
                 "api-subscription-key": self.api_key,
             },
-            timeout=30.0,
+            timeout=10.0,
         )
     
     async def transcribe(
         self,
         audio_bytes: bytes,
         language_code: str = "hi-IN",
-        max_retries: int = 3,
+        max_retries: int = 2,
         filename: str = "audio.wav",
         content_type: str = "audio/wav",
     ) -> STTResponse:

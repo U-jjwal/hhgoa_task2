@@ -34,7 +34,7 @@ class LLMHandler:
         self,
         api_key: Optional[str] = None,
         model: str = "groq/compound-mini",
-        max_tokens: int = 512,
+        max_tokens: int = 100,
     ):
         self.api_key = api_key or os.getenv("GROQ_API_KEY")
         self.fallback_api_key = os.getenv("GROQ_API_KEY_FALLBACK")
@@ -47,7 +47,7 @@ class LLMHandler:
                     "Authorization": f"Bearer {self.api_key}",
                     "Content-Type": "application/json",
                 },
-                timeout=30.0,
+                timeout=10.0,
             )
         else:
             self.client = None
@@ -58,7 +58,7 @@ class LLMHandler:
                     "Authorization": f"Bearer {self.fallback_api_key}",
                     "Content-Type": "application/json",
                 },
-                timeout=30.0,
+                timeout=10.0,
             )
         else:
             self.fallback_client = None
@@ -69,33 +69,21 @@ class LLMHandler:
         passages: List[RetrievedPassage],
         language: str = "hi",
     ) -> List[dict]:
-        """Build structured prompt with retrieved context."""
+        """Build structured prompt with retrieved context (top 3 only for speed)."""
         
-        # Format retrieved passages as numbered context
+        # Only use top 3 passages to minimize token count and LLM latency
+        top_passages = passages[:3]
+        
         context_parts = []
-        for i, passage in enumerate(passages, 1):
-            context_parts.append(
-                f"[Source {i} | Strategy: {passage.chunk_strategy} | Score: {passage.score:.3f}]\n"
-                f"{passage.text}"
-            )
-        context = "\n\n".join(context_parts)
+        for i, passage in enumerate(top_passages, 1):
+            # Trim each passage to max 200 chars to reduce tokens
+            text = passage.text[:200]
+            context_parts.append(f"[{i}] {text}")
+        context = "\n".join(context_parts)
         
-        system_prompt = """You are a helpful multilingual RAG assistant. Your job is to answer questions ONLY based on the provided context passages.
+        system_prompt = """Answer ONLY from context. Reply in user's language. Be concise. Return JSON: {"answer": "...", "sources_used": [1], "confidence": 0.8}"""
 
-Rules:
-1. ONLY use information from the provided context passages to answer.
-2. If the context doesn't contain enough information to answer, say so clearly.
-3. Respond in the SAME LANGUAGE as the user's question.
-4. Keep answers concise and factual.
-5. Cite which source number(s) you used.
-6. Return your response as JSON with format: {"answer": "your answer", "sources_used": [1, 2], "confidence": 0.0-1.0}"""
-
-        user_prompt = f"""Context Passages:
-{context}
-
-User Question: {query}
-
-Answer the question based ONLY on the context above. Return JSON."""
+        user_prompt = f"Context:\n{context}\n\nQ: {query}\nJSON:"
 
         return [
             {"role": "system", "content": system_prompt},
@@ -107,7 +95,7 @@ Answer the question based ONLY on the context above. Return JSON."""
         query: str,
         passages: List[RetrievedPassage],
         language: str = "hi",
-        max_retries: int = 3,
+        max_retries: int = 2,
     ) -> dict:
         """
         Generate an answer using the LLM with retry logic and fallback client support.
