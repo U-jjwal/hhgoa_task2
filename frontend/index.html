@@ -139,6 +139,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-shrink: 0;
         }
 
         .record-btn {
@@ -225,7 +226,8 @@
         }
 
         .text-input-wrapper {
-            width: 100%;
+            flex: 1;
+            min-width: 0;
             display: flex;
             background: rgba(0, 0, 0, 0.2);
             border: 1px solid var(--border-glass);
@@ -240,6 +242,8 @@
 
         .text-input {
             flex: 1;
+            width: 100%;
+            min-width: 0;
             background: transparent;
             border: none;
             color: var(--text-main);
@@ -264,6 +268,7 @@
             justify-content: center;
             cursor: pointer;
             transition: background 0.3s ease;
+            flex-shrink: 0;
         }
 
         .send-btn:hover {
