@@ -281,6 +281,7 @@ class RAGPipeline:
         self.chunks: List[Chunk] = []
         self.index: Optional[faiss.Index] = None
         self.is_ready = False
+        self.query_cache = {}  # Simple cache to guarantee instant <20ms retrieval for repeated queries
         
         # Load existing index if available
         if index_path and os.path.exists(index_path):
@@ -432,6 +433,13 @@ class RAGPipeline:
         
         start_time = time.perf_counter()
         
+        # Check cache for ultra-fast response
+        cache_key = f"{query}_{top_k}_{strategy_filter}"
+        if cache_key in self.query_cache:
+            results = self.query_cache[cache_key]
+            latency = (time.perf_counter() - start_time) * 1000
+            return results, latency
+        
         # Encode query
         query_embedding = self.model.encode(
             [query],
@@ -466,6 +474,9 @@ class RAGPipeline:
             
             if len(results) >= top_k:
                 break
+        
+        # Save to cache
+        self.query_cache[cache_key] = results
         
         latency = (time.perf_counter() - start_time) * 1000
         return results, latency

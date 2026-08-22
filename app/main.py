@@ -188,10 +188,16 @@ async def voice_query(
     
     # 5. LLM Generation
     if retrieval_check.is_on_topic:
+        try:
+            import langdetect
+            detected_lang = langdetect.detect(stt_response.transcript)
+        except:
+            detected_lang = language_code.split("-")[0]
+            
         llm_result = await llm_handler.generate(
             query=stt_response.transcript,
             passages=passages,
-            language=language_code.split("-")[0],
+            language=detected_lang,
         )
     else:
         llm_result = {
@@ -266,10 +272,16 @@ async def text_query(request: RAGQueryRequest):
     
     # 4. LLM Generation
     if retrieval_check.is_on_topic:
+        try:
+            import langdetect
+            detected_lang = langdetect.detect(request.query)
+        except:
+            detected_lang = request.language.value
+            
         llm_result = await llm_handler.generate(
             query=request.query,
             passages=passages,
-            language=request.language.value,
+            language=detected_lang,
         )
     else:
         llm_result = {

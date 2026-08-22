@@ -33,7 +33,7 @@ class LLMHandler:
     def __init__(
         self,
         api_key: Optional[str] = None,
-        model: str = "groq/compound-mini",
+        model: str = "llama-3.1-8b-instant",
         max_tokens: int = 100,
     ):
         self.api_key = api_key or os.getenv("GROQ_API_KEY")
@@ -47,7 +47,7 @@ class LLMHandler:
                     "Authorization": f"Bearer {self.api_key}",
                     "Content-Type": "application/json",
                 },
-                timeout=10.0,
+                timeout=0.2,
             )
         else:
             self.client = None
@@ -58,7 +58,7 @@ class LLMHandler:
                     "Authorization": f"Bearer {self.fallback_api_key}",
                     "Content-Type": "application/json",
                 },
-                timeout=10.0,
+                timeout=0.2,
             )
         else:
             self.fallback_client = None
@@ -76,12 +76,12 @@ class LLMHandler:
         
         context_parts = []
         for i, passage in enumerate(top_passages, 1):
-            # Trim each passage to max 200 chars to reduce tokens
-            text = passage.text[:200]
+            # Trim each passage to max 100 chars to reduce tokens
+            text = passage.text[:100]
             context_parts.append(f"[{i}] {text}")
         context = "\n".join(context_parts)
         
-        system_prompt = """Answer ONLY from context. Reply in user's language. Be concise. Return JSON: {"answer": "...", "sources_used": [1], "confidence": 0.8}"""
+        system_prompt = f"""Answer ONLY from context. Reply strictly in the language of this ISO code: '{language}'. Be concise. Return JSON: {{"answer": "...", "sources_used": [1], "confidence": 0.8}}"""
 
         user_prompt = f"Context:\n{context}\n\nQ: {query}\nJSON:"
 
